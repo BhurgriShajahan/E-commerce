@@ -1,5 +1,5 @@
 server:
-  port: 1010
+  port: 8080
 
 spring:
   profiles:
@@ -8,7 +8,7 @@ spring:
     name: API-GATEWAY
   cloud:
     config:
-      enabled: false  # Assuming you don't have a config server setup for this service
+      enabled: false
     gateway:
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
