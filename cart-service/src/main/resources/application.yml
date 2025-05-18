@@ -1,0 +1,34 @@
+server:
+  port: 7788
+
+spring:
+  application:
+    name: CART-SERVICE
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/mydatabase
+    username: root
+    password: Admin@123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+  cloud:
+    config:
+      enabled: false
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:4455/eureka
+
+  instance:
+    prefer-ip-address: true
+web:
+   resources:
+     cache:
+      use-etag: false

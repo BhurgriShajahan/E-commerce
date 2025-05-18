@@ -1,0 +1,91 @@
+server:
+  port: 1010
+
+spring:
+  profiles:
+    active: local
+  application:
+    name: API-GATEWAY
+  cloud:
+    config:
+      enabled: false  # Assuming you don't have a config server setup for this service
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+      routes:
+        - id: AUTH-SERVICE
+          uri: lb://AUTH-SERVICE
+          predicates:
+            - Path=/v1/auth/**,/v1/auth/test/**
+          filters:
+            - name: AuthenticationFilter
+
+        - id: PRODUCT-SERVICE
+          uri: lb://PRODUCT-SERVICE
+          predicates:
+            - Path=/v1/product/**,/v1/product/test/**,/v1/category/**
+          filters:
+            - name: AuthenticationFilter
+
+        - id: PAYMENT-SERVICE
+          uri: lb://PAYMENT-SERVICE
+          predicates:
+            - Path=/v1/payment/**,
+          filters:
+            - name: AuthenticationFilter
+
+        - id: CART-SERVICE
+          uri: lb://CART-SERVICE
+          predicates:
+            - Path=/v1/cart/**,
+          filters:
+            - name: AuthenticationFilter
+
+        - id: ORDER-SERVICE
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/v1/order/**,
+          filters:
+            - name: AuthenticationFilter
+
+        - id: NOTIFICATION-SERVICE
+          uri: lb://NOTIFICATION-SERVICE
+          predicates:
+            - Path=/v1/notification/**,
+          filters:
+            - name: AuthenticationFilter
+
+        - id: INVENTORY-SERVICE
+          uri: lb://INVENTORY-SERVICE
+          predicates:
+            - Path=/v1/inventory/**,
+          filters:
+            - name: AuthenticationFilter
+
+        - id: REVIEW-RATING-SERVICE
+          uri: lb://REVIEW-RATING-SERVICE
+          predicates:
+            - Path=/v1/rating/**,
+          filters:
+            - name: AuthenticationFilter
+
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:4455/eureka
+
+logging:
+  level:
+    root: INFO
+    com.gateway: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.cloud.gateway: DEBUG

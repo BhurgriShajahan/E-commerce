@@ -1,0 +1,65 @@
+server:
+  port: 1199
+
+spring:
+  application:
+    name: NOTIFICATION-SERVICE
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/mydatabase
+    username: root
+    password: Admin@123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+  cloud:
+    config:
+      enabled: false
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:4455/eureka
+
+  instance:
+    prefer-ip-address: true
+web:
+   resources:
+     cache:
+      use-etag: false
+
+  # Kafka configuration
+   kafka:
+     topic:
+       name: notification-topic
+     producer:
+       bootstrap-servers: localhost:9092
+       key-serializer: org.apache.kafka.common.serialization.StringSerializer
+       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+     consumer:
+       bootstrap-servers: localhost:9092
+       group-id: notification-group
+       auto-offset-reset: earliest
+       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+       value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+       properties:
+         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+         spring.json.trusted.packages: "*"
+
+  # Email configuration
+#   mail:
+#     host: smtp.gmail.com
+#     port: 587
+#     username: ....
+#     password: ...
+#     properties:
+#       mail:
+#         smtp:
+#           auth: true
+#           starttls:
+#             enable: true
